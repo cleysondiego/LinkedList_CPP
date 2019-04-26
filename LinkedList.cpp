@@ -7,7 +7,7 @@
 
 class Node {							//Classe principal para criação dos nós.
 	public:
-		Node* next;						//Atributos da classe.
+		Node* next;						//Atributos dos nós.
 		int data;
 };
 
@@ -29,13 +29,13 @@ class LinkedList {
 		bool empty();					//Método para verificar se a lista está vazia.
 };
 
-LinkedList::LinkedList() {				//Construtor.
+LinkedList::LinkedList() {				//Construtor da lista.
 	this->length = 0;					//Seta o tamanho como zero.
 	this->head = NULL;					//Seta o ponteiro para nulo.
 }
 
-LinkedList::~LinkedList(){
-	free(head);
+LinkedList::~LinkedList(){				//Desconstrutor da Lista.
+	free(head);							//Limpa o head da memória.
 	std::cout << "Lista \"deletada\"";	//Apenas mostra na tela que a lista foi "Deletada" (Desconstruida).
 }
 
@@ -57,75 +57,75 @@ void LinkedList::add(int data){			//Implementação do método de adicionar conteud
 	this->length++;						//Faz a contagem do tamanho da lista.
 }
 
-bool LinkedList::find(int data){
-	Node *node = new Node;
-	if (!head){
-		std::cout << "A lista está vazia! \n" << std::endl;		//Mostra mensagem avisando que a lista está vazia.
-		return false;										//Pausa o programa.
+bool LinkedList::find(int data){							//Implementação do método find.
+	Node *node = new Node;									//Criação de um ponteiro para um node.
+	if (!head){												//Verifica se o HEAD está vazio.
+		std::cout << "A lista está vazia! \n" << std::endl;	//Mostra mensagem avisando que a lista está vazia.
+		return false;										//Retorna false.
 	}
-	node = head;
-	for (; node; node = node->next){
-		if (node->data == data){
-			return true;
+	node = head;											//Atribui o HEAD para o Node.
+	for (; node; node = node->next){						//Percorre todos os nós.
+		if (node->data == data){							//Verifica se o nó atual tem o mesmo atributo que foi passado.
+			return true;									//Se a verificação for verdadeira, retorna true.
 		}
 	}
-	return false;
+	return false;											//Se a verificação for falsa, retorna false.
 }
 
-bool LinkedList::remove(int data){								//Implementação do método para remover um conteúdo da lista.
-	Node *node = new Node;
-	if (!find(data)){
-		return false;
+bool LinkedList::remove(int data){							//Implementação do método para remover um conteúdo da lista.
+	Node *node = new Node;									//Criação de um ponteiro para um node.
+	if (!find(data)){										//Verifica se a lista está vazia.
+		return false;										//Se tiver vazia, retorna false.
 	}
-	while (head->data == data){
+	while (head->data == data){								//Atuali
 		head = head->next;
 	}
-	if (!head){
-		return false;
+	if (!head){												//Verifica se o head não é nulo.
+		return false;										//Retorna false se for nulo.
 	}
-	node = head;
-	while(node){
-		if(node->next){
-			if(node->next->data == data){
-				Node *node2 = node->next->next;
-				free(node->next);
-				node->next = node2;
-				length--;
+	node = head;											//O nó recebe o head atualizado.
+	while(node){											//Enquanto o node não for null, roda o loop.
+		if(node->next){										//Se o próximo node não for null
+			if(node->next->data == data){					//Se o proximo node tiver um atributo igual ao parametro passado
+				Node *node2 = node->next->next;				//Cria-se um node temporário para guardar a referencia do próximo node que não será removido.
+				free(node->next);							//Limpa de memória o proximo nó
+				node->next = node2;							//Linka o segundo node com o próximo nó do node atual.
+				length--;									//Decrementa o tamanho atual da lista.
 			}
 		}
-		node = node->next;
+		node = node->next;									//Atualiza o node atual.
 	}
-	return true;
+	return true;											//Retorna true.
 }
 
-bool LinkedList::empty() {										//Implementação do méotodo para verificar se a lista está vazia.
-	return (this->head == NULL);								//Retorna true or false se a lista estiver vazia (ou não).
+bool LinkedList::empty() {									//Implementação do método empty para verificar se a lista está vazia.
+	return (this->head == NULL);							//Retorna true or false se a lista estiver vazia.
 }
 
-void menu (LinkedList *lista) {
+void menu (LinkedList *lista) {											//Criação da função menu.
 	int decision = 0;
 	do{
 		int value = 0;
 		system("CLS");
-		std::cout << "Oi, eu sou uma lista!\n\n" << std::endl;
+		std::cout << "Oi, eu sou uma lista!\n\n" << std::endl;			//Printa as opções disponiveis para o usuário.
 		std::cout << "1 - Printar a lista" << std::endl;
 		std::cout << "2 - Adicionar valor a lista" << std::endl;
 		std::cout << "3 - Remover valor da lista" << std::endl;
 		std::cout << "4 - Procurar valor na lista" << std::endl;
 		std::cout << "5 - Verificar o tamanho da lista" << std::endl;
 		std::cout << "6 - Sair" << std::endl;
-		std::cin >> decision;
+		std::cin >> decision;											//Guarda a decisão do usuário
 		switch (decision){
 			case 1:
-				system("CLS");
-				lista->print();
-				system("PAUSE");
+				system("CLS");											//Limpa a tela (windows).
+				lista->print();											//Chamada para o método print da lista.
+				system("PAUSE");										//Pausa o programa (windows).
 			break;
 			case 2:
 				system("CLS");
 				std::cout << "Digite um valor para adicionar a lista:" << std::endl;
 				std::cin >> value;
-				lista->add(value);
+				lista->add(value);														//Chamada para o método add da lista.
 				std::cout << "Valor adicionado!" << std::endl;
 				system("PAUSE");
 			break;
@@ -134,7 +134,7 @@ void menu (LinkedList *lista) {
 				std::cout << "Digite um valor para remover da lista:" << std::endl;
 				std::cin >> value;
 				if (lista->remove(value)){
-					lista->remove(value);
+					lista->remove(value);												//Chamada para o método remove da lista.
 					std::cout << "Valor removido!!" << std::endl;
 				}else{
 					std::cout << "Valor não encontrado!!" << std::endl;
@@ -146,26 +146,26 @@ void menu (LinkedList *lista) {
 				std::cout << "Digite um valor para procurar na lista:" << std::endl;
 				std::cin >> value;
 				if (lista->find(value)){
-					lista->find(value);
-					printf("Valor %d encontrado na lista!!", value);
+					lista->find(value);													//Chamada para o método find da lista.
+					std::cout << "Valor " << value << " encontrado na lista!!" << std::endl;
 				}else {
-					printf("Valor %d não encontrado na lista!!", value);
+					std::cout << "Valor " << value << " nao encontrado na lista!!" << std::endl;
 				}
 				system("PAUSE");
 			break;
 			case 5:
 				system("CLS");
-				printf("A lista tem atualmente %d de tamanho!\n", lista->length);
+				std::cout << "A lista tem atualmente " << lista->length << " de tamanho!" << std::endl;	//Printa o tamanho atual da lista.
 				system("PAUSE");
 			break;
 			case 6:
 				system("CLS");
-				printf("Obrigado por utilizar minha lista! =)\n");
+				std::cout << "Obrigado por utilizar minha lista!! =)" << std::endl;
 				exit(1);
 			break;
 			default:
 				system("CLS");
-				printf("Opcao invalida, tente novamente!! \n\n\n");
+				std::cout << "Opcao invalida, tente novamente!! \n\n" << std::endl;
 				system("PAUSE");
 		}
 	}while(decision != 6);
