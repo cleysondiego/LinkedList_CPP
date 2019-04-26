@@ -1,5 +1,5 @@
 /* Linked List
- * Implementação de uma lista ligada, em c++
+ * Implementação de uma lista ligada não ordenada, em c++
 */
 
 #include<iostream>
@@ -35,6 +35,7 @@ LinkedList::LinkedList() {				//Construtor.
 }
 
 LinkedList::~LinkedList(){
+	free(head);
 	std::cout << "Lista \"deletada\"";	//Apenas mostra na tela que a lista foi "Deletada" (Desconstruida).
 }
 
@@ -86,7 +87,10 @@ bool LinkedList::remove(int data){								//Implementação do método para remover
 	while(node){
 		if(node->next){
 			if(node->next->data == data){
-				node->next = node->next->next;
+				Node *node2 = node->next->next;
+				free(node->next);
+				node->next = node2;
+				length--;
 			}
 		}
 		node = node->next;
@@ -98,19 +102,77 @@ bool LinkedList::empty() {										//Implementação do méotodo para verificar se
 	return (this->head == NULL);								//Retorna true or false se a lista estiver vazia (ou não).
 }
 
+void menu (LinkedList *lista) {
+	int decision = 0;
+	do{
+		int value = 0;
+		system("CLS");
+		std::cout << "Oi, eu sou uma lista!\n\n" << std::endl;
+		std::cout << "1 - Printar a lista" << std::endl;
+		std::cout << "2 - Adicionar valor a lista" << std::endl;
+		std::cout << "3 - Remover valor da lista" << std::endl;
+		std::cout << "4 - Procurar valor na lista" << std::endl;
+		std::cout << "5 - Verificar o tamanho da lista" << std::endl;
+		std::cout << "6 - Sair" << std::endl;
+		std::cin >> decision;
+		switch (decision){
+			case 1:
+				system("CLS");
+				lista->print();
+				system("PAUSE");
+			break;
+			case 2:
+				system("CLS");
+				std::cout << "Digite um valor para adicionar a lista:" << std::endl;
+				std::cin >> value;
+				lista->add(value);
+				std::cout << "Valor adicionado!" << std::endl;
+				system("PAUSE");
+			break;
+			case 3:
+				system("CLS");
+				std::cout << "Digite um valor para remover da lista:" << std::endl;
+				std::cin >> value;
+				if (lista->remove(value)){
+					lista->remove(value);
+					std::cout << "Valor removido!!" << std::endl;
+				}else{
+					std::cout << "Valor não encontrado!!" << std::endl;
+				}
+				system("PAUSE");
+			break;
+			case 4:
+				system("CLS");
+				std::cout << "Digite um valor para procurar na lista:" << std::endl;
+				std::cin >> value;
+				if (lista->find(value)){
+					lista->find(value);
+					printf("Valor %d encontrado na lista!!", value);
+				}else {
+					printf("Valor %d não encontrado na lista!!", value);
+				}
+				system("PAUSE");
+			break;
+			case 5:
+				system("CLS");
+				printf("A lista tem atualmente %d de tamanho!\n", lista->length);
+				system("PAUSE");
+			break;
+			case 6:
+				system("CLS");
+				printf("Obrigado por utilizar minha lista! =)\n");
+				exit(1);
+			break;
+			default:
+				system("CLS");
+				printf("Opcao invalida, tente novamente!! \n\n\n");
+				system("PAUSE");
+		}
+	}while(decision != 6);
+}
+
 int main (int argc, char const *argv[]) {								//Método main padrão.
-	
 	LinkedList* lista = new LinkedList();								//Cria a variável lista do tipo LinkedList.
-	for (int i = 0; i < 100; ++i){										//Cria um for para preencher a lista.
-		//lista->add(rand() % 100);										//Implementa a lista utilizando o método add.
-		lista->add(i);
-	}
-	lista->print();
-	lista->find(9);
-	lista->find(900);
-	lista->remove(300);
-	lista->print();														//Utiliza o método print para printar todo o conteúdo da lista.
-	std::cout << "Tamanho da lista: " << lista -> length << std::endl;	//Printa o tamanho da lista utilizando o atributo length da lista.
-	delete lista;														//Deleta a lista.
+	menu(lista);														//Chamada para o menu.
 	return 0;
 }
