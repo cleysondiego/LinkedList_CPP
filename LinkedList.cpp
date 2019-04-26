@@ -19,7 +19,7 @@ class LinkedList {
 		Node *head;						//Ponteiro para o ultimo elemento da lista.
 
 		LinkedList();					//Construtor padrão
-		~LinkedList();					//Deconstrutor padrão
+		~LinkedList();					//Destrutor padrão
 
 		
 		bool find(int data);			//Método para procurar um elemento na lista.
