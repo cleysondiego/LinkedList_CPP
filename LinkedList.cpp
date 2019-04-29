@@ -22,11 +22,13 @@ class LinkedList {
 		~LinkedList();					//Destrutor padrão
 
 		
-		bool find(int data);			//Método para procurar um elemento na lista.
-		void add(int data);				//Método para adicionar um dado na lista.
-		bool remove(int data);			//Método para remover um dado da lista.
-		void print();					//Método para printar todo o conteúdo da lista.
-		bool empty();					//Método para verificar se a lista está vazia.
+		bool find(int data);					//Método para procurar um elemento na lista.
+		void add(int data);						//Método para adicionar um dado na lista.
+		void add_end(int data);					//Método para adicionar um dado ao final da lista.
+		void insert_after(int data, int prev);	//Método para adicionar um dado após um dado específico.
+		bool remove(int data);					//Método para remover um dado da lista.
+		void print();							//Método para printar todo o conteúdo da lista.
+		bool empty();							//Método para verificar se a lista está vazia.
 };
 
 LinkedList::LinkedList() {				//Construtor da lista.
@@ -55,6 +57,32 @@ void LinkedList::add(int data){			//Implementação do método de adicionar conteud
 	node->next = this->head;			//Seta o proximo nó para null.
 	this->head = node;					//Seta o head para um novo nó.
 	this->length++;						//Faz a contagem do tamanho da lista.
+}
+
+void LinkedList::add_end(int data){		//Implementação do método de adicionar conteudo no final da lista.
+	Node* new_node = new Node();		//Cria uma variavel do tipo node.
+	new_node->data = data;				//O node recebe o dado passado pelo parametro
+	Node* list = head;					//Cria outro nó que recebe o head.
+	while(list->next != NULL){			//Percorre toda a lista.
+		list = list->next;				//Atualiza a lista para percorrer até o final.
+	}
+	list->next = new_node;				//Adiciona o novo node quando o next da lista for nulo
+	this->length++;						//Aumenta a contagem do tamanho da lista.
+}
+
+void LinkedList::insert_after(int data, int prev){
+	Node *node = this->head;
+	Node *new_cursor = this->head;
+	while (node->data != prev){
+		node = node->next;
+		new_cursor = new_cursor->next;
+	}
+	if (node != NULL){
+		node->next->data = data;
+		node->next->next = new_cursor;
+	}else{
+		std::cout << "Nao foi possivel adicionar o dado na lista!!" << std::endl;
+	}
 }
 
 bool LinkedList::find(int data){							//Implementação do método find.
@@ -106,14 +134,17 @@ void menu (LinkedList *lista) {											//Criação da função menu.
 	int decision = 0;
 	do{
 		int value = 0;
+		int prev = 0;
 		system("CLS");
 		std::cout << "Oi, eu sou uma lista!\n\n" << std::endl;			//Printa as opções disponiveis para o usuário.
 		std::cout << "1 - Printar a lista" << std::endl;
 		std::cout << "2 - Adicionar valor a lista" << std::endl;
-		std::cout << "3 - Remover valor da lista" << std::endl;
-		std::cout << "4 - Procurar valor na lista" << std::endl;
-		std::cout << "5 - Verificar o tamanho da lista" << std::endl;
-		std::cout << "6 - Sair" << std::endl;
+		std::cout << "3 - Adicionar valor ao final da lista" << std::endl;
+		std::cout << "4 - Adicionar valor depois de um numero" << std::endl;
+		std::cout << "5 - Remover valor da lista" << std::endl;
+		std::cout << "6 - Procurar valor na lista" << std::endl;
+		std::cout << "7 - Verificar o tamanho da lista" << std::endl;
+		std::cout << "8 - Sair" << std::endl;
 		std::cin >> decision;											//Guarda a decisão do usuário
 		switch (decision){
 			case 1:
@@ -131,6 +162,24 @@ void menu (LinkedList *lista) {											//Criação da função menu.
 			break;
 			case 3:
 				system("CLS");
+				std::cout << "Digite um valor para adicionar ao final da lista:" << std::endl;
+				std::cin >> value;
+				lista->add_end(value);														//Chamada para o método add ao final da lista.
+				std::cout << "Valor adicionado!" << std::endl;
+				system("PAUSE");
+			break;
+			case 4:
+				system("CLS");
+				std::cout << "Digite um valor para adicionar a lista:" << std::endl;
+				std::cin >> value;
+				std::cout << "Digite o numero anterior ao que voce quer adicionar: " << std::endl;
+				std::cin >> prev;
+				lista->insert_after(value, prev);														//Chamada para o método insert after.
+				std::cout << "Valor adicionado!" << std::endl;
+				system("PAUSE");
+			break;
+			case 5:
+				system("CLS");
 				std::cout << "Digite um valor para remover da lista:" << std::endl;
 				std::cin >> value;
 				if (lista->remove(value)){
@@ -141,7 +190,7 @@ void menu (LinkedList *lista) {											//Criação da função menu.
 				}
 				system("PAUSE");
 			break;
-			case 4:
+			case 6:
 				system("CLS");
 				std::cout << "Digite um valor para procurar na lista:" << std::endl;
 				std::cin >> value;
@@ -153,12 +202,12 @@ void menu (LinkedList *lista) {											//Criação da função menu.
 				}
 				system("PAUSE");
 			break;
-			case 5:
+			case 7:
 				system("CLS");
 				std::cout << "A lista tem atualmente " << lista->length << " de tamanho!" << std::endl;	//Printa o tamanho atual da lista.
 				system("PAUSE");
 			break;
-			case 6:
+			case 8:
 				system("CLS");
 				std::cout << "Obrigado por utilizar minha lista!! =)" << std::endl;
 				exit(1);
@@ -168,7 +217,7 @@ void menu (LinkedList *lista) {											//Criação da função menu.
 				std::cout << "Opcao invalida, tente novamente!! \n\n" << std::endl;
 				system("PAUSE");
 		}
-	}while(decision != 6);
+	}while(decision != 8);
 }
 
 int main (int argc, char const *argv[]) {								//Método main padrão.
