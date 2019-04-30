@@ -70,16 +70,16 @@ void LinkedList::add_end(int data){		//Implementação do método de adicionar cont
 	this->length++;						//Aumenta a contagem do tamanho da lista.
 }
 
-void LinkedList::insert_after(int data, int prev){
-	Node *node = this->head;
-	Node *new_cursor = this->head;
-	while (node->data != prev){
-		node = node->next;
-		new_cursor = new_cursor->next;
+void LinkedList::insert_after(int data, int usr){	//Implementação do método de adicionar conteudo apos um dado especifico
+	Node *node = this->head;						//Cria um node com o head atual.
+	Node *new_node = new Node();					//Cria um novo node
+	new_node->data = data;							//O novo node recebe o dado passado pelo usuario
+	while (node->data != usr){						//Faz o loop para achar o dado que o usuario passou
+		node = node->next;							//Atualiza o node
 	}
-	if (node != NULL){
-		node->next->data = data;
-		node->next->next = new_cursor;
+	if (node != NULL){								//Verifica se não é nulo
+		new_node->next = node->next;				//O novo node recebe em seu next o node next atual
+		node->next = new_node;						//O node next recebe o novo node.
 	}else{
 		std::cout << "Nao foi possivel adicionar o dado na lista!!" << std::endl;
 	}
